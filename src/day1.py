@@ -1,8 +1,8 @@
 from pathlib import Path
-from util import read, parse, file
+from util import read, parse, file, timer
 
 CURR_DAY: int = 1
-INPUT_FILE_PATH: Path = file.abs_inp_path(1)
+INPUT_FILE_PATH: Path = file.abs_inp_path(CURR_DAY)
 
 
 def task2(left: list[int], right: list[int]) -> int:
@@ -20,6 +20,7 @@ def task1(left: list[int], right: list[int]) -> int:
     return sum(diff)
 
 
+@timer.timer
 def main() -> None:
     # example_right: list[int] = [4, 3, 5, 3, 9, 3]
     # example_left: list[int] = [3, 4, 2, 1, 3, 3]

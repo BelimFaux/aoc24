@@ -1,7 +1,7 @@
 import os.path
 from urllib.request import Request, HTTPError, urlopen
 from pathlib import Path
-import env
+from . import env
 
 YEAR: int = 2024
 SESSION_TOKEN: str = env.get_env("SESSION_TOKEN")
