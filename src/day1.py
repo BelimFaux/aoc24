@@ -1,4 +1,4 @@
-from util import read
+from util import read, parse
 
 INPUT_FILE_PATH: str = "../input/day1.txt"
 
@@ -21,7 +21,8 @@ def task1(left: list[int], right: list[int]) -> int:
 def main() -> None:
     # example_right: list[int] = [4, 3, 5, 3, 9, 3]
     # example_left: list[int] = [3, 4, 2, 1, 3, 3]
-    left, right = read.two_int_cols(read.to_string(INPUT_FILE_PATH))
+    input: list[str] = read.to_str_list(INPUT_FILE_PATH)
+    left, right = parse.two_int_cols(input)
 
     print("task1:", task1(left, right))
     print("task2:", task2(left, right))
