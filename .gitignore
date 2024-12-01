@@ -4,3 +4,5 @@ uv.lock
 .venv
 .env
 *.egg-info
+
+input/
