@@ -15,7 +15,9 @@ def __abs_path(day: int, test: bool = False) -> Path:
     suffix: str = ".test" if test else ""
     filename: str = f"day{day}{suffix}.txt"
     filepath: Path = __root_dir()
-    filepath = filepath / "input" / filename
+    filepath = filepath / "input"
+    filepath.mkdir(exist_ok=True)  # create input dir if it doesnt exist
+    filepath /= filename
 
     return filepath
 
