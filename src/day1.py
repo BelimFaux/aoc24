@@ -1,6 +1,8 @@
-from util import read, parse
+from pathlib import Path
+from util import read, parse, file
 
-INPUT_FILE_PATH: str = "../input/day1.txt"
+CURR_DAY: int = 1
+INPUT_FILE_PATH: Path = file.abs_inp_path(1)
 
 
 def task2(left: list[int], right: list[int]) -> int:
