@@ -5,16 +5,19 @@ from util import file
 
 
 def create_day(args: argparse.Namespace) -> None:
-    print(f"Create Day {args.day}")
+    """Handler for the `create` subcommand"""
+    print(f"Creating Day {args.day}")
     file.create_new_day(args.day)
 
 
 def run_day(args: argparse.Namespace) -> None:
+    """Handler for the `run` subcommand"""
     name: Path = file.get_day(args.day)
     runpy.run_path(str(name), run_name="__main__")
 
 
 def runall(args: argparse.Namespace) -> None:
+    """Handler for the `runall` subcommand"""
     del args
     for day in file.get_all_days():
         runpy.run_path(str(day), run_name="__main__")

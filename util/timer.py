@@ -7,6 +7,10 @@ P = ParamSpec("P")
 
 
 def timer(func: Callable[P, T]) -> Callable[P, T]:
+    """
+    Decorator for timing a function.
+    """
+
     def timer_function(*args, **kwargs) -> T:
         print(f"{f'Running {func.__name__}':-^40}")
         before: float = time.time()

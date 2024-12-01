@@ -3,6 +3,14 @@ import os
 
 
 def get_env(name: str) -> str:
+    """
+    Get value of environment variable with `name`.
+    If the variable doesn't exist, an error message is printed, and the program is exited.
+    ----------
+    Parameters
+    name : str
+        name of the variable to be retrieved.
+    """
     load_dotenv()
     cont: str | None = os.environ.get(name)
     if cont is None:
