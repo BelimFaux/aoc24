@@ -20,3 +20,8 @@ def get_env(name: str) -> str:
         exit(1)
 
     return cont
+
+
+def is_set(name: str) -> bool:
+    load_dotenv()
+    return os.environ.get(name) is not None

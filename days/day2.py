@@ -1,9 +1,10 @@
 from pathlib import Path
-from util import read, parse, file, timer
+from util import read, parse, file, timer, env
 
 CURR_DAY: int = 2
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
 TEST_FILE_PATH: Path = file.test_path(CURR_DAY)
+ONLY_TESTS: bool = env.is_set("TEST")
 
 
 def is_safe(report: list[int]) -> bool:
@@ -53,9 +54,11 @@ def day2() -> None:
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)
 
     print("test1:", task1(test))
-    print("task1:", task1(input))
     print("test2:", task2(test))
-    print("task2:", task2(input))
+
+    if not ONLY_TESTS:
+        print("task1:", task1(input))
+        print("task2:", task2(input))
 
 
 if __name__ == "__main__":

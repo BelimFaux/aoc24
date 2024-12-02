@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 import runpy
+import os
 from util import file
 
 
@@ -25,6 +26,11 @@ def runall(args: argparse.Namespace) -> None:
 
 def main() -> None:
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
+    parser.add_argument("--test", action="store_true", help="run only test inputs")
+    parser.add_argument(
+        "--no-time", action="store_true", help="don't time the functions"
+    )
+
     subparsers = parser.add_subparsers(title="Commands")
 
     create_parser: argparse.ArgumentParser = subparsers.add_parser(
@@ -49,6 +55,12 @@ def main() -> None:
     runall_parser.set_defaults(func=runall)
 
     args: argparse.Namespace = parser.parse_args()
+
+    if args.test:
+        os.environ["TEST"] = "1"
+    if args.no_time:
+        os.environ["NO_TIME"] = "1"
+
     if hasattr(args, "func"):
         args.func(args)
     else:
