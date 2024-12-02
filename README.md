@@ -17,6 +17,7 @@ The CLI is meant to automate some things and make youre life easier. Here a the 
 - `update-badge` - this command will fetch user-data from the AoC Website and update the Badges in the `README.md` accordingly.
 
 For all options you can run the `main.py` file with the `--help` flag.
+If you use the CLI, make sure you install all dependencies specified in the `pyproject.toml` file.
 
 ## Project Structure
 
