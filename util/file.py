@@ -118,7 +118,7 @@ def get_all_days() -> list[Path]:
     return [p for p in filepath.glob("day*.py") if p.is_file()]
 
 
-def create_new_day(day: int):
+def create_new_day(day: int) -> None:
     """
     Create a template python file for the given day.
     The template is specified by a `template.py.txt` file in the root directory.

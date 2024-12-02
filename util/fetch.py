@@ -33,7 +33,7 @@ def __get_response(url: str) -> bytearray:
     return raw
 
 
-def puzzle_input(day: int, filepath: Path):
+def puzzle_input(day: int, filepath: Path) -> None:
     """
     Download the puzzle input for some day from the AoC Website.
     If the Input File already exists, the function returns early.
