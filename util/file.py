@@ -1,10 +1,15 @@
 import os.path
-from urllib.request import Request, HTTPError, urlopen
 from pathlib import Path
-from . import env
+from re import sub
+from . import fetch
 
-YEAR: int = 2024
-SESSION_TOKEN: str = env.get_env("SESSION_TOKEN")
+DAY_REGEX: str = r"(?<=https:\/\/img\.shields\.io\/badge\/day%20📅-)[0-9]+(?=-blue)"
+STARS_REGEX: str = (
+    r"(?<=https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)"
+)
+COMPLETED_REGEX: str = (
+    r"(?<=https:\/\/img\.shields\.io\/badge\/days%20completed-)[0-9]+(?=-red)"
+)
 
 
 def __root_dir() -> Path:
@@ -33,36 +38,29 @@ def __abs_path(day: int, test: bool = False) -> Path:
     return filepath
 
 
-def download_puzzle_input(day: int):
+# A lot of this code is taken from `https://github.com/J0B10/aoc-badges-action/blob/master/aoc-badges.py`
+def replace_badges(day: int, stars: int, completed_days: int) -> None:
     """
-    Download the puzzle input for some day from the AoC Website.
-    If the Input File already exists, the function returns early.
-    If some Error occurs (like a wrong session key), an Error message with the Response Code is printed, and the Program exits.
-    Be careful with this function, as to not overwhelm the AoC Websites server.
+    Replaces the numbers in the badges in the README.md file with the given Arguments
     ----------
     Parameters
     day : int
-        The day for which the input should be retrieved.
+        the current day
+    stars : int
+        the amount of stars the user has
+    completed_days : int
+        the amount of days that the user completed successfully
     """
-    filepath: Path = __abs_path(day)
+    readme: Path = __root_dir() / "README.md"
+    with open(readme, "r") as f:
+        text: str = f.read()
 
-    # dont send unneccessary requests
-    if filepath.exists():
-        return
+    text = sub(DAY_REGEX, str(day), text)
+    text = sub(STARS_REGEX, str(stars), text)
+    text = sub(COMPLETED_REGEX, str(completed_days), text)
 
-    url: str = f"https://adventofcode.com/{YEAR}/day/{day}/input"
-    headers: dict[str, str] = {"Cookie": f"session={SESSION_TOKEN}"}
-    request: Request = Request(url, headers=headers)
-
-    try:
-        with urlopen(request, timeout=2) as response:
-            with open(filepath, "wb") as f:
-                f.write(response.read())
-    except HTTPError as e:
-        print(
-            f"Error while trying to download Input file for Day {day}.\nReceived: {e}\nPlease Download Input manually from '{url}', and place in {filepath}."
-        )
-        exit(1)
+    with open(readme, "w") as f:
+        f.write(text)
 
 
 def input_path(day: int) -> Path:
@@ -75,7 +73,7 @@ def input_path(day: int) -> Path:
         day for which to retrieve the path
     """
     filepath: Path = __abs_path(day)
-    download_puzzle_input(day)
+    fetch.puzzle_input(day, filepath)
 
     return filepath
 
@@ -133,6 +131,8 @@ def create_new_day(day: int):
     filepath: Path = get_day(day)
     if filepath.exists():
         return
+
+    _ = test_path(day)  # make sure a test file is also created
 
     template: Path = __root_dir() / "template.py.txt"
 
