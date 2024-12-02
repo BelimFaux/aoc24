@@ -21,3 +21,15 @@ def two_int_cols(input: list[str]) -> tuple[list[int], list[int]]:
         right.append(int(sp[1]))
 
     return (left, right)
+
+
+def inner_int_list(input: list[str]) -> list[list[int]]:
+    """
+    Parse a list of strings to a list of lists of integers.
+    No checks are performed.
+    ----------
+    Parameters
+    input : list[str]
+        the input list containing string of the correct format
+    """
+    return [[int(s) for s in line.split(" ") if s.strip() != ""] for line in input]
