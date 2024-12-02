@@ -9,7 +9,7 @@ YEAR: int = 2024
 SESSION_TOKEN: str = env.get_env("SESSION_TOKEN")
 
 
-def __get_response(url: str) -> str:
+def __get_response(url: str) -> bytearray:
     """
     Sends a Request to some url and returns the response as plain text.
     If some Error occurs (like a wrong session key), an Error message with the Response Code is printed, and the Program exits.
@@ -23,7 +23,7 @@ def __get_response(url: str) -> str:
 
     try:
         with urlopen(request, timeout=2) as response:
-            raw: str = response.read()
+            raw: bytearray = response.read()
     except HTTPError as e:
         print(
             f"Error while trying to access url {url}.\nReceived: {e}\nPlease check if youre Session Token is valid or try to download manually."
@@ -48,8 +48,8 @@ def puzzle_input(day: int, filepath: Path):
         return
 
     url: str = f"https://adventofcode.com/{YEAR}/day/{day}/input"
-    response = __get_response(url)
-    with open(filepath, "w") as f:
+    response: bytearray = __get_response(url)
+    with open(filepath, "wb") as f:
         f.write(response)
 
 
@@ -67,7 +67,7 @@ def user_stats(userid: str) -> tuple[int, int, int]:
     `[curr_day, total_stars, completed_days]`
     """
     url: str = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/{userid}.json"
-    response: str = __get_response(url)
+    response: str = __get_response(url).decode("utf-8")
 
     json_obj: dict = json.loads(response)
     user_dict: dict = json_obj["members"][userid]

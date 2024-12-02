@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
 import os
 
+# load .env when module is imported
+load_dotenv()
+
 
 def get_env(name: str) -> str:
     """
@@ -11,7 +14,6 @@ def get_env(name: str) -> str:
     name : str
         name of the variable to be retrieved.
     """
-    load_dotenv()
     cont: str | None = os.environ.get(name)
     if cont is None:
         print(
@@ -23,5 +25,4 @@ def get_env(name: str) -> str:
 
 
 def is_set(name: str) -> bool:
-    load_dotenv()
     return os.environ.get(name) is not None
