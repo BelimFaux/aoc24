@@ -1,8 +1,8 @@
 # Advent of Code 2024
 
-![](https://img.shields.io/badge/day%20📅-2-blue)
-![](https://img.shields.io/badge/stars%20⭐-4-yellow)
-![](https://img.shields.io/badge/days%20completed-2-red)
+![](https://img.shields.io/badge/day%20📅-3-blue)
+![](https://img.shields.io/badge/stars%20⭐-6-yellow)
+![](https://img.shields.io/badge/days%20completed-3-red)
 
 This Repository contains some solutions for advent of code 2024 as well as a CLI to make some things easier.
 Feel free to use the solutions, as well as the rest of this repo for whatever you want.
