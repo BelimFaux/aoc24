@@ -1,8 +1,6 @@
 from urllib.request import Request, HTTPError, urlopen
 from pathlib import Path
 import json
-import pytz
-from datetime import date, datetime
 from . import env
 
 YEAR: int = 2024
@@ -54,17 +52,17 @@ def puzzle_input(day: int, filepath: Path) -> None:
 
 
 # A lot of this code is taken from `https://github.com/J0B10/aoc-badges-action/blob/master/aoc-badges.py`
-def user_stats(userid: str) -> tuple[int, int, int]:
+def user_stats(userid: str) -> tuple[int, int]:
     """
     Fetch the user stats from the AoC Website.
-    Returned is a tuple of integers representing in following order the current day, total stars, and completed days
+    Returned is a tuple of integers representing in following order total stars, and completed days
     ----------
     Parameters
     userid : str
         userid of the user for whom to fetch the stats
     -------
     Returns
-    `[curr_day, total_stars, completed_days]`
+    `[total_stars, completed_days]`
     """
     url: str = f"https://adventofcode.com/{YEAR}/leaderboard/private/view/{userid}.json"
     response: str = __get_response(url).decode("utf-8")
@@ -84,18 +82,4 @@ def user_stats(userid: str) -> tuple[int, int, int]:
         print(f"Invalid Json response while trying to fetch user stats.\n{e}")
         exit(1)
 
-    new_york_tz = pytz.timezone(
-        "America/New_York"
-    )  # AoC is published with UTC-5 (New York)
-
-    day: int = 0
-    today: date = datetime.now(new_york_tz).date()
-    # clamp day to december of the current year
-    if today < datetime(YEAR, 12, 1, tzinfo=new_york_tz).date():
-        day = 0
-    elif today > datetime(YEAR, 12, 31, tzinfo=new_york_tz).date():
-        day = 24
-    else:
-        day = today.day
-
-    return (day, stars, days_completed)
+    return (stars, days_completed)

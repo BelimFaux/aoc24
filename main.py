@@ -29,12 +29,11 @@ def badge(args: argparse.Namespace) -> None:
     del args
     print("Warning: don't overuse this method, too limit requests to the AoC Website.")
 
-    day, stars, completed_days = fetch.user_stats(env.get_env("AOC_USER_ID"))
-    file.replace_badges(day, stars, completed_days)
+    stars, completed_days = fetch.user_stats(env.get_env("AOC_USER_ID"))
+    file.replace_badges(stars, completed_days)
 
     print(
         f"""Updated badges to:
-    current day: {day},
     amount of stars: {stars},
     completed days: {completed_days}"""
     )
