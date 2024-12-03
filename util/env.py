@@ -25,4 +25,11 @@ def get_env(name: str) -> str:
 
 
 def is_set(name: str) -> bool:
+    """
+    Test if an environment variable is set.
+    ----------
+    Parameters
+    name : str
+        name of the environment variable
+    """
     return os.environ.get(name) is not None
