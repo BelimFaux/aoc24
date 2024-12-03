@@ -42,9 +42,15 @@ def badge(args: argparse.Namespace) -> None:
 
 def main() -> None:
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
-    parser.add_argument("--test", action="store_true", help="run only test inputs")
     parser.add_argument(
-        "--no-time", action="store_true", help="don't time the functions"
+        "--test",
+        action="store_true",
+        help="run only test inputs (can also be set via the `TEST` environment variable)",
+    )
+    parser.add_argument(
+        "--no-time",
+        action="store_true",
+        help="don't time the functions (can also be set via the `NO_TIME` environment variable)",
     )
 
     subparsers = parser.add_subparsers(title="Commands")
