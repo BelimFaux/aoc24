@@ -8,6 +8,7 @@ ONLY_TESTS: bool = env.is_set("TEST")
 
 
 def parse_num(input: str) -> tuple[int, int]:
+    """try to parse a number of up to 3 digits at the start of input"""
     substr: str = ""
     for c in input:
         if c.isdigit():
@@ -15,63 +16,51 @@ def parse_num(input: str) -> tuple[int, int]:
         else:
             break
     if len(substr) == 0 or len(substr) > 3:
-        return 0, -1
+        return 0, -1  # error
     return len(substr), int(substr)
 
 
-def task2(input: str):
-    result: int = 0
+# using custom parser instead of regex
+def both_tasks(input: str) -> tuple[int, int]:
+    task1: int = 0
+    task2: int = 0
     do: bool = True
     idx: int = 0
     while idx < len(input):
-        if do and input[idx] == "m":
-            if input[idx : idx + 4] == "mul(":
-                idx += 4
-                ln, num1 = parse_num(input[idx:])
-                idx += ln
-                if input[idx] != "," or num1 == -1:
-                    continue
-                idx += 1
-                ln, num2 = parse_num(input[idx:])
-                idx += ln
-                if input[idx] != ")" or num1 == -1:
-                    continue
-                result += num1 * num2
-        if input[idx] == "d":
-            if input[idx : idx + 7] == "don't()":
-                do = False
-                idx += 7
+        if input[idx : idx + 4] == "mul(":  # parse mul(x,y) instr
+            idx += 4
+            num_len, num1 = parse_num(input[idx:])
+            idx += num_len
+            if input[idx] != "," or num1 == -1:
                 continue
-            elif input[idx : idx + 4] == "do()":
-                do = True
-                idx += 4
+            idx += 1
+            num_len, num2 = parse_num(input[idx:])
+            idx += num_len
+            if input[idx] != ")" or num1 == -1:
                 continue
+            task1 += num1 * num2
+            if do:
+                task2 += num1 * num2
+        if input[idx : idx + 7] == "don't()":  # parse don't() instr
+            do = False
+            idx += 7
+            continue
+        elif input[idx : idx + 4] == "do()":  # parse do() instr
+            do = True
+            idx += 4
+            continue
 
         idx += 1
 
-    return result
+    return task1, task2
+
+
+def task2(input: str):
+    return both_tasks(input)[1]
 
 
 def task1(input: str) -> int:
-    result: int = 0
-    idx: int = 0
-    while idx < len(input):
-        if input[idx] == "m":
-            if input[idx : idx + 4] == "mul(":
-                idx += 4
-                ln, num1 = parse_num(input[idx:])
-                idx += ln
-                if input[idx] != "," or num1 == -1:
-                    continue
-                idx += 1
-                ln, num2 = parse_num(input[idx:])
-                idx += ln
-                if input[idx] != ")" or num1 == -1:
-                    continue
-                result += num1 * num2
-        idx += 1
-
-    return result
+    return both_tasks(input)[0]
 
 
 @timer.timer
