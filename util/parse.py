@@ -33,3 +33,17 @@ def inner_int_list(input: list[str]) -> list[list[int]]:
         the input list containing string of the correct format
     """
     return [[int(s) for s in line.split(" ") if s.strip() != ""] for line in input]
+
+
+def to_tuples(input: list[str], sep: str) -> list[tuple[str, str]]:
+    """
+    Parse a list of strings to a list of tuples of two strings.
+    No checks are performed.
+    ----------
+    Parameters
+    input : list[str]
+        the input list containing string of the correct format
+    sep : str
+        The string seperating the values
+    """
+    return [(elem.split(sep)[0], elem.split(sep)[1]) for elem in input]
