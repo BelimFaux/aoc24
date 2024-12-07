@@ -14,6 +14,7 @@ def parse_line(input: str) -> tuple[int, list[int]]:
 
 # solution inspired by https://github.com/maneatingape/advent-of-code-rust/blob/main/src/year2024/day07.rs
 # i adopted this solution, because mine takes ~5 min to terminate...
+# if you want to see my solution, take a look at commit 6c44cb03948433955b11dd7d9e74c53744590ccd
 def is_valid(nums: list[int], target: int, index: int, concat: bool) -> bool:
     # basecase: if the list only has one number left it has to be equal to the target num
     if index == 0:
