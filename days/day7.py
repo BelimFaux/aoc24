@@ -1,6 +1,4 @@
 from pathlib import Path
-import itertools
-from collections import deque, abc
 from util import read, file, timer, env
 
 CURR_DAY: int = 7
@@ -14,19 +12,39 @@ def parse_line(input: str) -> tuple[int, list[int]]:
     return int(l1), [int(n) for n in l2.split(" ") if n != ""]
 
 
-def calibration_results(nums: list[int], possible_ops: list[str]) -> abc.Iterator[int]:
-    for ops in itertools.product(possible_ops, repeat=len(nums) - 1):
-        queue: deque = deque(nums)
-        for op in ops:
-            first: int = queue.popleft()
-            sec: int = queue.popleft()
-            res: int = 0
-            if op == "|":
-                res = eval(f"{first}{sec}")
-            else:
-                res = eval(f"{first} {op} {sec}")
-            queue.insert(0, res)
-        yield queue[0]
+# solution inspired by https://github.com/maneatingape/advent-of-code-rust/blob/main/src/year2024/day07.rs
+# i adopted this solution, because mine takes ~5 min to terminate...
+def is_valid(nums: list[int], target: int, index: int, concat: bool) -> bool:
+    # basecase: if the list only has one number left it has to be equal to the target num
+    if index == 0:
+        return target == nums[0]
+
+    if concat:
+        # if the target can be concatennated by the last number,
+        # the numbers are valid, if the target without the last number as suffix can be constructed by the rest of the numbers
+        if str(target).endswith(str(nums[index])) and is_valid(
+            nums,
+            int(str(target).removesuffix(str(nums[index])) or "0"),
+            index - 1,
+            concat,
+        ):
+            return True
+
+    # if the target is divisible by the last number,
+    # the numbers are valid if the target divided by the last number can be constructed by the rest of the numbers
+    if target % nums[index] == 0 and is_valid(
+        nums, target // nums[index], index - 1, concat
+    ):
+        return True
+
+    # if the target is bigger or equal to the last number,
+    # the numbers are valid if the target minus the last number can be constructed by the rest of the numbers
+    if target >= nums[index] and is_valid(
+        nums, target - nums[index], index - 1, concat
+    ):
+        return True
+
+    return False
 
 
 def task2(input: list[str], prev_res: list[int]) -> int:
@@ -37,7 +55,7 @@ def task2(input: list[str], prev_res: list[int]) -> int:
             prev_res.pop(0)
             total += target
             continue
-        if target in calibration_results(nums, ["+", "*", "|"]):
+        if is_valid(nums, target, len(nums) - 1, True):
             total += target
     return total
 
@@ -47,7 +65,7 @@ def task1(input: list[str]) -> list[int]:
     for line in input:
         target, nums = parse_line(line)
 
-        if target in calibration_results(nums, ["+", "*"]):
+        if is_valid(nums, target, len(nums) - 1, False):
             results.append(target)
     return results
 
