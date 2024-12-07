@@ -29,22 +29,26 @@ def calibration_results(nums: list[int], possible_ops: list[str]) -> abc.Iterato
         yield queue[0]
 
 
-def task2(input: list[str], prev_res: set[int]) -> int:
+def task2(input: list[str], prev_res: list[int]) -> int:
     total: int = 0
     for line in input:
         target, nums = parse_line(line)
-        if target in prev_res or target in calibration_results(nums, ["+", "*", "|"]):
+        if len(prev_res) and prev_res[0] == target:
+            prev_res.pop(0)
+            total += target
+            continue
+        if target in calibration_results(nums, ["+", "*", "|"]):
             total += target
     return total
 
 
-def task1(input: list[str]) -> set[int]:
-    results: set[int] = set()  # caching results for part 2
+def task1(input: list[str]) -> list[int]:
+    results: list[int] = []  # caching results for part 2
     for line in input:
         target, nums = parse_line(line)
 
         if target in calibration_results(nums, ["+", "*"]):
-            results.add(target)
+            results.append(target)
     return results
 
 
@@ -53,7 +57,7 @@ def day7() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)
 
-    res: set[int] = task1(test)
+    res: list[int] = task1(test)
     print("test1:", sum(res))
     print("test2:", task2(test, res))
 
