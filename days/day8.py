@@ -19,8 +19,12 @@ def parse_freqs(input: list[str]) -> dict[str, list[tuple[int, int]]]:
     return frequencies
 
 
-def add_dist(p1: tuple[int, int], p2: tuple[int, int]) -> tuple[int, int]:
-    return (p1[0] + (p1[0] - p2[0]), p1[1] + (p1[1] - p2[1]))
+def add(p1: tuple[int, int], p2: tuple[int, int]) -> tuple[int, int]:
+    return (p1[0] + p2[0], p1[1] + p2[1])
+
+
+def sub(p1: tuple[int, int], p2: tuple[int, int]) -> tuple[int, int]:
+    return (p1[0] - p2[0], p1[1] - p2[1])
 
 
 def coord_in_range(coord: tuple[int, int], range_li: range, range_col: range) -> bool:
@@ -38,17 +42,18 @@ def task2(input: list[str]):
         for pair in product(coords, repeat=2):
             if pair[0] == pair[1]:
                 continue
-            left: tuple[int, int] = add_dist(pair[0], pair[1])
-            prev_left: tuple[int, int] = pair[0]
-            right: tuple[int, int] = add_dist(pair[1], pair[0])
-            prev_right: tuple[int, int] = pair[1]
+            dist: tuple[int, int] = sub(pair[0], pair[1])
+            left: tuple[int, int] = add(pair[0], dist)
+            right: tuple[int, int] = add(pair[1], dist)
+
             # walk the line as long as the spots are in range
             while coord_in_range(left, range_li, range_col):
                 spots.add(left)
-                left, prev_left = add_dist(left, prev_left), left
+                left = add(left, dist)
             while coord_in_range(right, range_li, range_col):
                 spots.add(right)
-                right, prev_right = add_dist(right, prev_right), right
+                right = add(right, dist)
+
     return len(spots)
 
 
@@ -62,8 +67,9 @@ def task1(input: list[str]) -> int:
         for pair in product(coords, repeat=2):
             if pair[0] == pair[1]:
                 continue
-            left: tuple[int, int] = add_dist(pair[0], pair[1])
-            right: tuple[int, int] = add_dist(pair[1], pair[0])
+            dist: tuple[int, int] = sub(pair[0], pair[1])
+            left: tuple[int, int] = add(pair[0], dist)
+            right: tuple[int, int] = add(pair[1], dist)
             if coord_in_range(left, range_li, range_col):
                 spots.add(left)
             if coord_in_range(right, range_li, range_col):
