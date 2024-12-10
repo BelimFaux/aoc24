@@ -75,17 +75,31 @@ def task1(input: list[str]) -> int:
     return sum(find_score(input, t) for t in trailheads)
 
 
+# since both tasks use the same function, execution time can be halfed by combining both tasks
+def both_tasks(input: list[str]) -> tuple[int, int]:
+    trailheads: list[tuple[int, int]] = find_trailheads(input)
+    paths: list[list[list[tuple[int, int]]]] = [
+        find_paths(input, t) for t in trailheads
+    ]
+
+    part1: int = sum(len({p[-1] for p in path}) for path in paths)
+    part2: int = sum(len(path) for path in paths)
+    return part1, part2
+
+
 @timer.timer
 def day10() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)
 
-    print("test1:", task1(test))
-    print("test2:", task2(test))
+    part1, part2 = both_tasks(test)
+    print("test1:", part1)
+    print("test2:", part2)
 
     if not ONLY_TESTS:
-        print("task1:", task1(input))
-        print("task2:", task2(input))
+        part1, part2 = both_tasks(input)
+        print("part1:", part1)
+        print("part2:", part2)
 
 
 if __name__ == "__main__":
