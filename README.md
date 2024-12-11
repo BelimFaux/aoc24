@@ -3,20 +3,22 @@
 ![](https://img.shields.io/badge/stars%20⭐-22-yellow)
 ![](https://img.shields.io/badge/days%20completed-11-red)
 
-This Repository contains some solutions for advent of code 2024 as well as a CLI to make some things easier.
+This Repository contains some solutions for advent of code 2024 as well as a CLI to make some things easier.  
 Feel free to use the solutions, as well as the rest of this repo for whatever you want.
 
 ## CLI
 
 The CLI is meant to automate some things and make youre life easier. Here a the available commands:
 
-- `create n` - is used to initialize all files needed for a new day with number `n`. These include `days/day{n}.py` and `input/day{n}.test.txt` (the normal input file is downloaded automatically when running the corresponding python file)
-- `run n` - this command runs the `days/day{n}.py` file.
+- `create n` - is used to initialize all files needed for a new day with number `n`. These include `aoc/days/day{n}.py` and `aoc/input/day{n}.test.txt` (the normal input file is downloaded automatically when running the corresponding python file)
+- `run n` - this command runs the `aoc/days/day{n}.py` file. If `aoc/input/day{n}.txt` isn't present, it will automatically be downloaded from the [Advent of Code Website](https://adventofcode.com)
 - `runall` - this command runs all available days in the `days/` directory. Be careful when using this command, as running days when the input file is not present will result in the input being downloaded. This might send a lot of requests.
 - `update-badge` - this command will fetch user-data from the AoC Website and update the Badges in the `README.md` accordingly.
 
-For all options you can run the `aoc` module with the `--help` flag.
+For all options you can run the `aoc` module with the `--help` flag.  
 If you use the CLI, make sure you install all dependencies specified in the `pyproject.toml` file.
+
+### Setup
 
 It's generally recommended, to create a virtual environment and install the project there:
 
