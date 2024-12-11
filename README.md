@@ -72,3 +72,10 @@ The module `aoc.util` contains various helper method for the CLI, as well as the
 
 If you clone this repo, make sure to create an `.env` file, which contains youre AoC Session-Token as well as youre userid (see `example.env`).
 Both can be found on the AoC website (see [here](https://github.com/wimglenn/advent-of-code-wim/issues/1) for help).
+
+## Benchmark
+
+I am not really focused on execution speed. But it might be interesting to see, how the days compare against each other.  
+When running the `runall` Command, the `--benchmark` flag can be specified, to generate a pie chart of the execution times:
+
+![Execution Times Pie Chart](benchmark.png)

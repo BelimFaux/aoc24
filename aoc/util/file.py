@@ -37,6 +37,11 @@ def __abs_path(day: int, test: bool = False) -> Path:
     return filepath
 
 
+def bench_image_path() -> Path:
+    filepath: Path = __root_dir().parent / "benchmark.png"
+    return filepath
+
+
 # A lot of this code is taken from `https://github.com/J0B10/aoc-badges-action/blob/master/aoc-badges.py`
 def replace_badges(stars: int, completed_days: int) -> None:
     """

@@ -33,3 +33,28 @@ def is_set(name: str) -> bool:
         name of the environment variable
     """
     return os.environ.get(name) is not None
+
+
+def set(name: str) -> None:
+    """
+    sets an environment variable if it doesn't yet exist.
+    ----------
+    Parameters
+    name : str
+        name of the environment variable
+    """
+    if os.environ.get(name):
+        return
+    os.environ[name] = "1"
+
+
+def unset(name: str) -> None:
+    """
+    unset an environment variable if it is set.
+    ----------
+    Parameters
+    name : str
+        name of the environment variable
+    """
+    if os.environ.get(name):
+        del os.environ[name]
