@@ -47,3 +47,7 @@ def to_tuples(input: list[str], sep: str) -> list[tuple[str, str]]:
         The string seperating the values
     """
     return [(elem.split(sep)[0], elem.split(sep)[1]) for elem in input]
+
+
+def to_int_list(input: str, sep: str) -> list[int]:
+    return [int(c) for c in input.split(sep)]
