@@ -44,18 +44,19 @@ python3 -m aoc
 │  │  └── ...
 │  ├── util
 │  │  ├── __init__.py
+│  │  ├── bench.py
 │  │  ├── env.py
 │  │  ├── fetch.py
 │  │  ├── file.py
 │  │  ├── parse.py
-│  │  ├── read.py
-│  │  └── timer.py
+│  │  └── read.py
 │  ├── __init__.py
-│  └── __main__.py
+│  ├── __main__.py
+│  └── template.py.txt
 ├── README.md
+├── benchmark.png
 ├── example.env
 ├── pyproject.toml
-├── template.py.txt
 └── uv.lock
 ```
 
@@ -76,6 +77,6 @@ Both can be found on the AoC website (see [here](https://github.com/wimglenn/adv
 ## Benchmark
 
 I am not really focused on execution speed. But it might be interesting to see, how the days compare against each other.  
-When running the `runall` Command, the `--benchmark` flag can be specified, to generate a pie chart of the execution times:
+When running the `runall` Command, the `--plot` flag can be specified, to generate a pie chart of the execution times:
 
 ![Execution Times Pie Chart](benchmark.png)
