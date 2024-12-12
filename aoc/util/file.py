@@ -1,3 +1,5 @@
+"""Module for handling files and filepaths."""
+
 import os.path
 from pathlib import Path
 from re import sub
@@ -55,7 +57,7 @@ def replace_badges(stars: int, completed_days: int) -> None:
     completed_days : int
         the amount of days that the user completed successfully
     """
-    readme: Path = __root_dir() / "README.md"
+    readme: Path = __root_dir().parent / "README.md"
     with open(readme, "r") as f:
         text: str = f.read()
 

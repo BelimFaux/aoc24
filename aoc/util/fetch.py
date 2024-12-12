@@ -1,3 +1,5 @@
+"""Module for fetching data from the AoC Website."""
+
 from urllib.request import Request, HTTPError, urlopen
 from pathlib import Path
 import json

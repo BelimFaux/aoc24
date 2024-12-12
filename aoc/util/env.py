@@ -1,3 +1,5 @@
+"""Module for handling environment variables."""
+
 from dotenv import load_dotenv
 import os
 

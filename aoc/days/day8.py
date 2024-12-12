@@ -1,6 +1,6 @@
 from pathlib import Path
 from itertools import product
-from aoc.util import read, file, timer, env
+from aoc.util import read, file, bench, env
 
 CURR_DAY: int = 8
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -78,7 +78,7 @@ def task1(input: list[str]) -> int:
     return len(spots)
 
 
-@timer.timer
+@bench.timer
 def day8() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)

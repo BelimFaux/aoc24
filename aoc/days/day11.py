@@ -1,6 +1,6 @@
 from pathlib import Path
 from collections import Counter, defaultdict
-from aoc.util import read, parse, file, timer, env
+from aoc.util import read, parse, file, bench, env
 
 CURR_DAY: int = 11
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -60,7 +60,7 @@ def task1(input: str) -> int:
     return len(pebbles)
 
 
-@timer.timer
+@bench.timer
 def day11() -> None:
     test: str = read.to_string(TEST_FILE_PATH)
     input: str = read.to_string(INPUT_FILE_PATH)

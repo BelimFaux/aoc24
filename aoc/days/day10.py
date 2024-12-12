@@ -1,6 +1,6 @@
 from pathlib import Path
 from collections import deque
-from aoc.util import read, file, timer, env
+from aoc.util import read, file, bench, env
 
 CURR_DAY: int = 10
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -87,7 +87,7 @@ def both_tasks(input: list[str]) -> tuple[int, int]:
     return part1, part2
 
 
-@timer.timer
+@bench.timer
 def day10() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)

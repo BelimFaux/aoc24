@@ -1,6 +1,6 @@
 from pathlib import Path
 from functools import cmp_to_key
-from aoc.util import read, parse, file, timer, env
+from aoc.util import read, parse, file, bench, env
 
 CURR_DAY: int = 5
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -46,7 +46,7 @@ def task1(input: list[str]):
     return sum(middle_val(u) for u in updates)
 
 
-@timer.timer
+@bench.timer
 def day5() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)

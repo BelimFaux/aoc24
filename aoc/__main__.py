@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 import runpy
-from aoc.util import fetch, file, env, timer
+from aoc.util import fetch, file, env, bench
 
 
 def create_day(args: argparse.Namespace) -> None:
@@ -18,15 +18,15 @@ def run_day(args: argparse.Namespace) -> None:
 
 def runall(args: argparse.Namespace) -> None:
     """Handler for the `runall` subcommand"""
-    if args.benchmark:
-        timer.TIME = True
-        timer.BENCHMARK = True
+    if args.plot:
+        bench.TIME = True
+        bench.PLOT = True
 
     for day in file.get_all_days():
         runpy.run_path(str(day), run_name="__main__")
 
-    if args.benchmark:
-        timer.bench()
+    if args.plot:
+        bench.bench()
 
 
 def badge(args: argparse.Namespace) -> None:
@@ -79,9 +79,9 @@ def main() -> None:
         "runall", help="Run all available Days"
     )
     runall_parser.add_argument(
-        "--benchmark",
+        "--plot",
         action="store_true",
-        help="Generate a chart with the execution times of the days",
+        help="Plot a chart with the execution times of the days",
     )
     runall_parser.set_defaults(func=runall)
 
@@ -95,7 +95,7 @@ def main() -> None:
     if args.test:
         env.set("TEST")
     if args.no_time:
-        timer.TIME = False
+        bench.TIME = False
 
     if hasattr(args, "func"):
         args.func(args)

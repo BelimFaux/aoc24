@@ -1,3 +1,5 @@
+"""Module for reading input data to a specified format"""
+
 from pathlib import Path
 
 

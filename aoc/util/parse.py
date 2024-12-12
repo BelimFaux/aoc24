@@ -1,3 +1,6 @@
+"""Module for parsing input data to common structures."""
+
+
 def two_int_cols(input: list[str]) -> tuple[list[int], list[int]]:
     """
     Parse a list of strings to two integer lists.

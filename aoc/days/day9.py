@@ -1,5 +1,5 @@
 from pathlib import Path
-from aoc.util import read, file, timer, env
+from util import read, file, bench, env
 
 CURR_DAY: int = 9
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -112,7 +112,7 @@ def task1(input: str) -> int:
     return sum
 
 
-@timer.timer
+@bench.timer
 def day9() -> None:
     test: str = read.to_string(TEST_FILE_PATH)
     input: str = read.to_string(INPUT_FILE_PATH)
