@@ -7,3 +7,5 @@ uv.lock
 build/
 
 input/
+
+day14part2*
