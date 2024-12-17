@@ -1,5 +1,5 @@
 from pathlib import Path
-from util import read, file, bench, env
+from aoc.util import read, file, bench, env
 
 CURR_DAY: int = 9
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
