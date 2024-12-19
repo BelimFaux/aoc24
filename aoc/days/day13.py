@@ -1,5 +1,6 @@
 from pathlib import Path
 from aoc.util import read, file, bench, env
+from aoc.util.point import point, add, mul
 
 CURR_DAY: int = 13
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -11,26 +12,23 @@ class Machine:
 
     def __init__(self) -> None:
         # uninizialized
-        self.a: tuple[int, int] = (0, 0)
-        self.b: tuple[int, int] = (0, 0)
-        self.goal: tuple[int, int] = (0, 0)
+        self.a: point = (0, 0)
+        self.b: point = (0, 0)
+        self.goal: point = (0, 0)
 
-    def push_a(self, times: int) -> tuple[int, int]:
-        return (self.a[0] * times, self.a[1] * times)
+    def push_a(self, times: int) -> point:
+        return mul(self.a, times)
 
-    def push_b(self, times: int) -> tuple[int, int]:
-        return (self.b[0] * times, self.b[1] * times)
+    def push_b(self, times: int) -> point:
+        return mul(self.b, times)
 
     # cramers rule
-    def solve(self) -> tuple[int, int] | None:
+    def solve(self) -> point | None:
         det = self.a[0] * self.b[1] - self.a[1] * self.b[0]
         push_a = (self.goal[0] * self.b[1] - self.goal[1] * self.b[0]) // det
         push_b = (self.goal[1] * self.a[0] - self.goal[0] * self.a[1]) // det
 
-        if (
-            self.a[0] * push_a + self.b[0] * push_b,
-            self.a[1] * push_a + self.b[1] * push_b,
-        ) == self.goal:
+        if add(mul(self.a, push_a), mul(self.b, push_b)) == self.goal:
             return (push_a, push_b)
 
         return None
@@ -39,11 +37,7 @@ class Machine:
         return f"Button A: {self.a}, Button B: {self.b}, Goal: {self.goal}"
 
 
-def tuple_add(lhs: tuple[int, int], rhs: tuple[int, int]) -> tuple[int, int]:
-    return (lhs[0] + rhs[0], lhs[1] + lhs[1])
-
-
-def parse_val(line: str) -> tuple[int, int]:
+def parse_val(line: str) -> point:
     x: int = int(line[line.find("X") + 2 : line.find(",")])
     y: int = int(line[line.find("Y") + 2 :])
     return (x, y)

@@ -1,6 +1,7 @@
 from pathlib import Path
 from collections import defaultdict
 from aoc.util import read, file, bench, env
+from aoc.util.point import point, add
 
 CURR_DAY: int = 12
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -8,22 +9,22 @@ TEST_FILE_PATH: Path = file.test_path(CURR_DAY)
 ONLY_TESTS: bool = env.is_set("TEST")
 
 
-NEIGHBORS: list[tuple[int, int]] = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+NEIGHBORS: list[point] = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
 
-def get_neighbors(pos: tuple[int, int]) -> list[tuple[int, int]]:
-    return [(d[0] + pos[0], d[1] + pos[1]) for d in NEIGHBORS]
+def get_neighbors(pos: point) -> list[point]:
+    return [add(pos, d) for d in NEIGHBORS]
 
 
-def collect_regions(map: list[str]) -> dict[str, list[set[tuple[int, int]]]]:
-    regions: dict[str, list[set[tuple[int, int]]]] = defaultdict(list)
+def collect_regions(map: list[str]) -> dict[str, list[set[point]]]:
+    regions: dict[str, list[set[point]]] = defaultdict(list)
 
     for li, line in enumerate(map):
         for col, c in enumerate(line):
-            c_regions: list[set[tuple[int, int]]] = regions[c]
+            c_regions: list[set[point]] = regions[c]
 
             # find all regions that contain neighbors of this cell
-            fitting_reg: list[set[tuple[int, int]]] = [
+            fitting_reg: list[set[point]] = [
                 region
                 for region in c_regions
                 if any(n for n in get_neighbors((li, col)) if n in region)
@@ -47,13 +48,13 @@ def collect_regions(map: list[str]) -> dict[str, list[set[tuple[int, int]]]]:
     return regions
 
 
-def calc_perimeter(region: set[tuple[int, int]]) -> int:
+def calc_perimeter(region: set[point]) -> int:
     corners: int = 0
     # count the number of corners for each position
     for pos in region:
         # get boolean for all directions that represents if there is a neighbor
         down, up, right, left, d_right, d_left, u_right, u_left = [
-            True if (pos[0] + dx, pos[1] + dy) in region else False
+            add(pos, (dx, dy)) in region
             for (dx, dy) in NEIGHBORS + [(1, 1), (1, -1), (-1, 1), (-1, -1)]
         ]
 
@@ -70,7 +71,7 @@ def calc_perimeter(region: set[tuple[int, int]]) -> int:
     return corners
 
 
-def task2(regions: dict[str, list[set[tuple[int, int]]]]) -> int:
+def task2(regions: dict[str, list[set[point]]]) -> int:
     total_cost: int = 0
     for r in regions.values():
         for region in r:
@@ -81,7 +82,7 @@ def task2(regions: dict[str, list[set[tuple[int, int]]]]) -> int:
     return total_cost
 
 
-def task1(regions: dict[str, list[set[tuple[int, int]]]]) -> int:
+def task1(regions: dict[str, list[set[point]]]) -> int:
     total_cost: int = 0
     for r in regions.values():
         for region in r:

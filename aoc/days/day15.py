@@ -1,5 +1,6 @@
 from pathlib import Path
 from aoc.util import read, file, bench, env
+from aoc.util.point import point, add, sub
 
 CURR_DAY: int = 15
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -7,20 +8,12 @@ TEST_FILE_PATH: Path = file.test_path(CURR_DAY)
 ONLY_TESTS: bool = env.is_set("TEST")
 
 
-MOVEMENTS: dict[str, tuple[int, int]] = {
+MOVEMENTS: dict[str, point] = {
     "^": (-1, 0),
     "<": (0, -1),
     ">": (0, 1),
     "v": (1, 0),
 }
-
-
-def tuple_add(lhs: tuple[int, int], rhs: tuple[int, int]) -> tuple[int, int]:
-    return (lhs[0] + rhs[0], lhs[1] + rhs[1])
-
-
-def tuple_sub(lhs: tuple[int, int], rhs: tuple[int, int]) -> tuple[int, int]:
-    return (lhs[0] - rhs[0], lhs[1] - rhs[1])
 
 
 def double(c: str) -> tuple[str, str]:
@@ -36,9 +29,9 @@ def double(c: str) -> tuple[str, str]:
 # add every field to be moved to the list, and returns if they are free to move
 def move_box(
     field: list[list[str]],
-    b: tuple[int, int],
-    dir: tuple[int, int],
-    to_move: list[tuple[int, int]],
+    b: point,
+    dir: point,
+    to_move: list[point],
 ) -> bool:
     bli, bcol = b
 
@@ -51,10 +44,10 @@ def move_box(
     else:
         return False
 
-    next = tuple_add(b, dir)
+    next = add(b, dir)
     if not move_box(field, next, dir, to_move):
         return False
-    onext = tuple_add((oli, ocol), dir)
+    onext = add((oli, ocol), dir)
     if not move_box(field, onext, dir, to_move):
         return False
 
@@ -75,7 +68,7 @@ def task2(input: str) -> int:
             temp.append(b)
         field.append(temp)
 
-    robot: tuple[int, int] = (0, 0)
+    robot: point = (0, 0)
 
     for li, line in enumerate(field):
         for col, c in enumerate(line):
@@ -86,7 +79,7 @@ def task2(input: str) -> int:
         if i == "\n":
             continue
         dli, dcol = MOVEMENTS[i]
-        nli, ncol = tuple_add((dli, dcol), robot)
+        nli, ncol = add((dli, dcol), robot)
         match field[nli][ncol]:
             case "#" | "@":
                 continue
@@ -96,7 +89,7 @@ def task2(input: str) -> int:
                 robot = (nli, ncol)
             case "[" | "]":
                 if i == "^" or i == "v":
-                    to_move: list[tuple[int, int]] = []
+                    to_move: list[point] = []
                     if not move_box(field, (nli, ncol), (dli, dcol), to_move):
                         continue
 
@@ -105,7 +98,7 @@ def task2(input: str) -> int:
                     to_move = [x for x in to_move if not (x in seen or seen.add(x))]
                     # swap every box with its neighbor below or above
                     for bli, bcol in to_move:
-                        nbli, nbcol = tuple_add((bli, bcol), (dli, dcol))
+                        nbli, nbcol = add((bli, bcol), (dli, dcol))
                         field[bli][bcol], field[nbli][nbcol] = (
                             field[nbli][nbcol],
                             field[bli][bcol],
@@ -114,7 +107,7 @@ def task2(input: str) -> int:
                 else:
                     bli, bcol = (nli, ncol)
                     while field[bli][bcol] == "[" or field[bli][bcol] == "]":
-                        bli, bcol = tuple_add((bli, bcol), (dli, dcol))
+                        bli, bcol = add((bli, bcol), (dli, dcol))
 
                     # if there is a wall, break
                     if field[bli][bcol] == "#":
@@ -122,7 +115,7 @@ def task2(input: str) -> int:
 
                     # move each box one to the right
                     while (bli, bcol) != (nli, ncol):
-                        prevli, prevcol = tuple_sub((bli, bcol), (dli, dcol))
+                        prevli, prevcol = sub((bli, bcol), (dli, dcol))
                         field[bli][bcol], field[prevli][prevcol] = (
                             field[prevli][prevcol],
                             field[bli][bcol],
@@ -147,7 +140,7 @@ def task1(input: str) -> int:
     f, instr = input.split("\n\n", 1)
     field: list[list[str]] = [[c for c in line] for line in f.splitlines()]
 
-    robot: tuple[int, int] = (0, 0)
+    robot: point = (0, 0)
 
     for li, line in enumerate(field):
         if "@" in line:
@@ -159,7 +152,7 @@ def task1(input: str) -> int:
         if i == "\n":
             continue
         dli, dcol = MOVEMENTS[i]
-        nli, ncol = tuple_add((dli, dcol), robot)
+        nli, ncol = add((dli, dcol), robot)
         match field[nli][ncol]:
             case "#" | "@":
                 continue
@@ -171,13 +164,13 @@ def task1(input: str) -> int:
                 bli, bcol = (nli, ncol)
                 # find the furthest box
                 while field[bli][bcol] == "O":
-                    bli, bcol = tuple_add((bli, bcol), (dli, dcol))
+                    bli, bcol = add((bli, bcol), (dli, dcol))
                 # if there is a wall, break
                 if field[bli][bcol] == "#":
                     continue
                 # move each box one to the right
                 while (bli, bcol) != (nli, ncol):
-                    prevli, prevcol = tuple_sub((bli, bcol), (dli, dcol))
+                    prevli, prevcol = sub((bli, bcol), (dli, dcol))
                     field[bli][bcol], field[prevli][prevcol] = (
                         field[prevli][prevcol],
                         field[bli][bcol],

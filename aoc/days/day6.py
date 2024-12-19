@@ -1,15 +1,16 @@
 from pathlib import Path
 from aoc.util import read, file, bench, env
+from aoc.util.point import point
 
 CURR_DAY: int = 6
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
 TEST_FILE_PATH: Path = file.test_path(CURR_DAY)
 ONLY_TESTS: bool = env.is_set("TEST")
 
-DIRECTIONS: list[tuple[int, int]] = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+DIRECTIONS: list[point] = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
 
-def start_pos(input: list[str]) -> tuple[int, int]:
+def start_pos(input: list[str]) -> point:
     for i, line in enumerate(input):
         for j, column in enumerate(line):
             if column == "^":

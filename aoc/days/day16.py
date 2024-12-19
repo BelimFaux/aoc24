@@ -2,26 +2,23 @@ import heapq
 from pathlib import Path
 from collections import defaultdict
 from aoc.util import read, file, bench, env
+from aoc.util.point import point, add, sub
 
 CURR_DAY: int = 16
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
 TEST_FILE_PATH: Path = file.test_path(CURR_DAY)
 ONLY_TESTS: bool = env.is_set("TEST")
 
-DIR: list[tuple[int, int]] = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+DIR: list[point] = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 
-def is_goal(map: list[str], pos: tuple[int, int]) -> bool:
+def is_goal(map: list[str], pos: point) -> bool:
     return map[pos[0]][pos[1]] == "E"
-
-
-def tuple_add(lhs: tuple[int, int], rhs: tuple[int, int]) -> tuple[int, int]:
-    return (lhs[0] + rhs[0], lhs[1] + rhs[1])
 
 
 class State:
 
-    def __init__(self, pos: tuple[int, int], dir: int) -> None:
+    def __init__(self, pos: point, dir: int) -> None:
         self.pos = pos
         self.dir = dir
 
@@ -30,14 +27,14 @@ class State:
         if is_goal(map, self.pos):
             return actions
 
-        next_pos: tuple[int, int] = tuple_add(self.pos, DIR[self.dir])
+        next_pos: point = add(self.pos, DIR[self.dir])
         if map[next_pos[0]][next_pos[1]] != "#":
             actions.append((State(next_pos, self.dir), 1))
 
-        left: tuple[int, int] = tuple_add(self.pos, DIR[(self.dir + 1) % 4])
+        left: point = add(self.pos, DIR[(self.dir + 1) % 4])
         if map[left[0]][left[1]] != "#":
             actions.append((State(self.pos, (self.dir + 1) % 4), 1000))
-        right: tuple[int, int] = tuple_add(self.pos, DIR[(self.dir - 1) % 4])
+        right: point = add(self.pos, DIR[(self.dir - 1) % 4])
         if map[right[0]][right[1]] != "#":
             actions.append((State(self.pos, (self.dir - 1) % 4), 1000))
 
@@ -59,7 +56,7 @@ class State:
         return f"State {self.pos} / {self.dir}"
 
 
-def all_dijkstra(input: list[str]):
+def all_dijkstra(input: list[str]) -> tuple[int, int]:
     start: State = State((len(input) - 2, 1), 0)
     d: dict[State, int] = {start: 0}
     paths: defaultdict[State, list[tuple[list[State], int]]] = defaultdict(
@@ -86,7 +83,7 @@ def all_dijkstra(input: list[str]):
 
     m: int = min(c for n, c in d.items() if is_goal(input, n.pos))
 
-    fields: set[tuple[int, int]] = set()
+    fields: set[point] = set()
     goals: list[State] = [State((1, len(input[0]) - 2), i) for i in range(4)]
     for goal in goals:
         for path, cost in paths[goal]:

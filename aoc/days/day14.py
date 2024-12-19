@@ -1,8 +1,8 @@
 from pathlib import Path
 from PIL import Image
-import os
 import numpy as np
 from aoc.util import read, file, bench, env
+from aoc.util.point import point, add
 
 CURR_DAY: int = 14
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -12,13 +12,11 @@ ONLY_TESTS: bool = env.is_set("TEST")
 
 class Robot:
 
-    def __init__(
-        self, pos: tuple[int, int], vel: tuple[int, int], bounds: tuple[int, int]
-    ) -> None:
-        self.ipos: tuple[int, int] = pos
-        self.pos: tuple[int, int] = pos
-        self.ivel: tuple[int, int] = vel
-        self.vel: tuple[int, int] = vel
+    def __init__(self, pos: point, vel: point, bounds: point) -> None:
+        self.ipos: point = pos
+        self.pos: point = pos
+        self.ivel: point = vel
+        self.vel: point = vel
         self.bounds: tuple[int, int] = bounds
 
     def move(self, times: int) -> None:

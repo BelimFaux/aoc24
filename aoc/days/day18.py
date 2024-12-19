@@ -2,6 +2,7 @@ from collections import defaultdict
 from pathlib import Path
 import heapq
 from aoc.util import read, parse, file, bench, env
+from aoc.util.point import in_range, point, add
 
 CURR_DAY: int = 18
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -9,23 +10,15 @@ TEST_FILE_PATH: Path = file.test_path(CURR_DAY)
 ONLY_TESTS: bool = env.is_set("TEST")
 
 
-MOVEMENTS: list[tuple[int, int]] = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+MOVEMENTS: list[point] = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 
 
-def tuple_add(rhs: tuple[int, int], lhs: tuple[int, int]) -> tuple[int, int]:
-    return (rhs[0] + lhs[0], rhs[1] + lhs[1])
-
-
-def dijkstra(
-    fallen: set[tuple[int, int]], end: tuple[int, int]
-) -> list[tuple[int, int]]:
-    start: tuple[int, int] = (0, 0)
+def dijkstra(fallen: set[point], end: point) -> list[point]:
+    start: point = (0, 0)
     pq: list = [(0, start)]
-    d: dict[tuple[int, int], int] = {start: 0}
-    path: defaultdict[tuple[int, int], list[tuple[int, int]]] = defaultdict(
-        list, {start: [start]}
-    )
-    visited: set[tuple[int, int]] = set()
+    d: dict[point, int] = {start: 0}
+    path: defaultdict[point, list[point]] = defaultdict(list, {start: [start]})
+    visited: set[point] = set()
 
     while pq:
         dist, elem = heapq.heappop(pq)
@@ -36,11 +29,9 @@ def dijkstra(
             continue
         visited.add(elem)
 
-        for new_elem in [tuple_add(elem, d) for d in MOVEMENTS]:
-            if (
-                new_elem in fallen
-                or new_elem[0] not in range(end[0] + 1)
-                or new_elem[1] not in range(end[1] + 1)
+        for new_elem in [add(elem, d) for d in MOVEMENTS]:
+            if new_elem in fallen or not in_range(
+                new_elem, range(end[0] + 1), range(end[1] + 1)
             ):
                 continue
 
@@ -53,12 +44,10 @@ def dijkstra(
     return []
 
 
-def task2(input: list[str], vals: tuple[int, int]) -> tuple[int, int]:
+def task2(input: list[str], vals: tuple[int, int]) -> point:
     dim, iter = vals
-    byte: list[tuple[int, int]] = [
-        (int(x), int(y)) for (x, y) in parse.to_tuples(input, sep=",")
-    ]
-    fallen_bytes: set[tuple[int, int]] = {b for b in byte[:iter]}
+    byte: list[point] = [(int(x), int(y)) for (x, y) in parse.to_tuples(input, sep=",")]
+    fallen_bytes: set[point] = {b for b in byte[:iter]}
     path: set = set(dijkstra(fallen_bytes, (dim, dim)))
 
     while iter < len(byte):
@@ -74,11 +63,8 @@ def task2(input: list[str], vals: tuple[int, int]) -> tuple[int, int]:
 
 def task1(input: list[str], vals: tuple[int, int]) -> int:
     dim, iter = vals
-    byte: list[tuple[int, int]] = [
-        (int(x), int(y)) for (x, y) in parse.to_tuples(input, sep=",")
-    ]
-
-    fallen_bytes: set[tuple[int, int]] = {b for b in byte[:iter]}
+    byte: list[point] = [(int(x), int(y)) for (x, y) in parse.to_tuples(input, sep=",")]
+    fallen_bytes: set[point] = {b for b in byte[:iter]}
 
     return len(dijkstra(fallen_bytes, (dim, dim))) - 1
 
