@@ -67,8 +67,9 @@ def day4() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)
 
-    print("test1:", task1(test))
-    print("test2:", task2(test))
+    if len(test):
+        print("test1:", task1(test))
+        print("test2:", task2(test))
 
     if not ONLY_TESTS:
         print("task1:", task1(input))

@@ -2,7 +2,7 @@ import heapq
 from pathlib import Path
 from collections import defaultdict
 from aoc.util import read, file, bench, env
-from aoc.util.point import point, add, sub
+from aoc.util.point import point, add
 
 CURR_DAY: int = 16
 INPUT_FILE_PATH: Path = file.input_path(CURR_DAY)
@@ -108,9 +108,10 @@ def day16() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)
 
-    res_test: tuple[int, int] = all_dijkstra(test)
-    print("test1:", task1(res_test))
-    print("test2:", task2(res_test))
+    if len(test):
+        res_test: tuple[int, int] = all_dijkstra(test)
+        print("test1:", task1(res_test))
+        print("test2:", task2(res_test))
 
     if not ONLY_TESTS:
         res_input: tuple[int, int] = all_dijkstra(input)

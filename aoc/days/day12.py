@@ -101,9 +101,10 @@ def day12() -> None:
     test: list[str] = read.to_str_list(TEST_FILE_PATH)
     input: list[str] = read.to_str_list(INPUT_FILE_PATH)
 
-    regions = collect_regions(test)
-    print("test1:", task1(regions))
-    print("test2:", task2(regions))
+    if len(test):
+        regions = collect_regions(test)
+        print("test1:", task1(regions))
+        print("test2:", task2(regions))
 
     if not ONLY_TESTS:
         regions = collect_regions(input)
