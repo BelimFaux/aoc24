@@ -1,5 +1,8 @@
 # Advent of Code 2024
 
+> [!WARNING]
+> This repo was moved to [https://codeberg.org/belim_faux/advent_of_code](https://codeberg.org/belim_faux/advent_of_code)
+
 ![](https://img.shields.io/badge/stars%20⭐-42-yellow)
 ![](https://img.shields.io/badge/days%20completed-20-red)
 
